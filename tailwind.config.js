@@ -5,26 +5,37 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          100: "#FFF8DC", // Light shade
-          200: "#FFEFD5",
-          300: "#FFD700", // Default Bright Yellow
-          400: "#FFC700",
-          500: "#FFB000",
-          600: "#FF9900",
-          700: "#FF8000",
-          800: "#FF6700",
-          900: "#FF5500", // Darker shade
+          100: "#E0F7FA", // Light Blue
+          200: "#B2EBF2", // Light Cyan
+          300: "#80DEEA", // Cyan
+          400: "#4DD0E1", // Deep Sky Blue
+          500: "#26C6DA", // Bright Blue
+          600: "#00BCD4", // Dark Cyan
+          700: "#00ACC1", // Teal
+          800: "#0097A7", // Dark Teal
+          900: "#00838F", // Deep Teal
         },
         secondary: {
-          100: "#FFB6A1", // Light shade
-          200: "#FF9C80",
-          300: "#FF7F50", // Default Coral
-          400: "#FF6430",
-          500: "#FF4A1C",
-          600: "#FF2F08",
-          700: "#F62300",
-          800: "#D61B00",
-          900: "#A61200", // Darker shade
+          100: "#FFEBEE", // Light Pink
+          200: "#FFCDD2", // Soft Pink
+          300: "#EF9A9A", // Light Red
+          400: "#E57373", // Medium Red
+          500: "#EF5350", // Bright Red
+          600: "#F44336", // Red
+          700: "#E53935", // Dark Red
+          800: "#D32F2F", // Darker Red
+          900: "#C62828", // Darker Red
+        },
+        accent: {
+          100: "#FFE0B2", // Light Orange
+          200: "#FFCC80", // Soft Orange
+          300: "#FFB74D", // Medium Orange
+          400: "#FFA726", // Bright Orange
+          500: "#FF9800", // Orange
+          600: "#FB8C00", // Dark Orange
+          700: "#F57C00", // Darker Orange
+          800: "#EF6C00", // Dark Orange
+          900: "#E65100", // Deep Orange
         },
         background: {
           100: "#F7F7F7", // Light shade
