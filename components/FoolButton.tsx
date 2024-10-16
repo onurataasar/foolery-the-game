@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // Assuming you're using Ionicons, you can change this to any icon library you prefer
+import { Ionicons } from "@expo/vector-icons"; // Assuming you're using Ionicons
 
 interface FoolButtonProps {
   onPress: () => void;
@@ -8,7 +8,10 @@ interface FoolButtonProps {
   className?: string;
   variant?: "primary" | "secondary";
   size?: "small" | "medium" | "large";
-  iconPrefix?: keyof typeof Ionicons.glyphMap; // New prop for icon prefix
+  iconPrefix?: keyof typeof Ionicons.glyphMap;
+  iconSize?: number; // Icon size customization
+  iconColor?: string; // Icon color customization
+  disabled?: boolean;
 }
 
 const FoolButton: React.FC<FoolButtonProps> = ({
@@ -17,20 +20,31 @@ const FoolButton: React.FC<FoolButtonProps> = ({
   className,
   variant = "primary",
   size = "medium",
-  iconPrefix = "arrow-forward-sharp", // Destructure the new prop
+  iconPrefix = "arrow-forward-sharp",
+  iconSize = 24,
+  iconColor = "white",
+  disabled = false, // Handle disabled state
 }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.button, styles[variant], styles[size]]}
+      disabled={disabled}
+      style={[
+        styles.button,
+        styles[variant],
+        styles[size],
+        disabled && styles.disabledButton, // Disabled style handling
+      ]}
       className={className}
+      accessibilityRole="button"
+      accessibilityLabel={typeof children === "string" ? children : "button"}
     >
       <View style={styles.content}>
         {iconPrefix && (
           <Ionicons
             name={iconPrefix}
-            size={24}
-            color="white"
+            size={iconSize} // Dynamic size
+            color={iconColor} // Dynamic color
             style={styles.icon}
           />
         )}
@@ -68,6 +82,9 @@ const styles = StyleSheet.create({
   },
   secondary: {
     backgroundColor: "#FF9800",
+  },
+  disabledButton: {
+    backgroundColor: "#D3D3D3", // Disabled button color
   },
   small: {
     padding: 5,
