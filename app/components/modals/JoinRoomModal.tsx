@@ -7,6 +7,8 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 
 interface ModalComponentProps {
@@ -25,30 +27,39 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <TouchableWithoutFeedback onPress={onClose}>
-        <View style={styles.modalContainer}>
-          <TouchableWithoutFeedback>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Enter Game Code</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter the code..."
-                keyboardType="numeric"
-              />
-              <View style={styles.modalButtons}>
-                <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-                  <Text style={styles.buttonText}>Close</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.joinButton}>
-                  <Text style={styles.buttonText}>Join</Text>
-                </TouchableOpacity>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? -20 : 0} // Reduce offset on iOS
+      >
+        <TouchableWithoutFeedback onPress={onClose}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Enter Game Code</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter the code..."
+                  keyboardType="numeric"
+                />
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={styles.closeButton}
+                    onPress={onClose}
+                  >
+                    <Text style={styles.buttonText}>Close</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.joinButton}>
+                    <Text style={styles.buttonText}>Join</Text>
+                  </TouchableOpacity>
+                </View>
+                {/* Invisible spacer for extra space */}
+                <View style={styles.spacer} />
               </View>
-              {/* Add an invisible spacer at the bottom */}
-              <View style={styles.spacer} />
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
@@ -65,7 +76,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     paddingHorizontal: 20,
     paddingTop: 20,
-    paddingBottom: 0, // Removed padding-bottom
     alignItems: "center",
   },
   spacer: {
@@ -85,6 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     fontSize: 18,
+    color: "#333",
   },
   modalButtons: {
     flexDirection: "row",
