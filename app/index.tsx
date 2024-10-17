@@ -26,14 +26,18 @@ export default function Index() {
         style={{ width: 250, height: 250 }}
         className="rounded-full"
       />
-      <View style={{ gap: 20 }} className="flex flex-col items-center mt-8">
-        <Text className="text-4xl text-secondary-500">Welcome to Foolery!</Text>
+      <View style={{ gap: 20 }} className="flex flex-col items-center my-8">
+        <Text className="text-4xl text-secondary-500">
+          {" "}
+          Foolery'e Hoşgeldin!
+        </Text>
+        {/* 
         <Text
           style={{ fontFamily: "Baloo2", gap: 12 }}
-          className="text-center text-xl text-text-500 px-6"
+          className="text-center text-xl text-text-500 px-6 font-bold"
         >
-          Rakibini kandır, en yüksek puanı al ve kazan!
-        </Text>
+          Rakibini kandır ve kazan!
+        </Text> */}
       </View>
       <View style={{ gap: 16 }} className="flex flex-col items-center mt-6">
         <FoolButton
