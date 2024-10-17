@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 interface ModalComponentProps {
   isVisible: boolean;
@@ -30,29 +31,30 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? -20 : 0} // Reduce offset on iOS
+        keyboardVerticalOffset={Platform.OS === "ios" ? -20 : 0} // Reduced offset on iOS
       >
         <TouchableWithoutFeedback onPress={onClose}>
           <View style={styles.modalContainer}>
             <TouchableWithoutFeedback>
               <View style={styles.modalContent}>
-                <Text style={styles.modalTitle}>Enter Game Code</Text>
+                {/* Close icon (X) on the top right */}
+                <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
+                  <Ionicons name="close" size={24} color="black" />
+                </TouchableOpacity>
+
+                <Text style={styles.modalTitle}>Bir Odaya Katıl</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="Enter the code..."
+                  placeholder="Oyuna başlamak için oda kodunu girin"
+                  placeholderTextColor="#888"
                   keyboardType="numeric"
                 />
-                <View style={styles.modalButtons}>
-                  <TouchableOpacity
-                    style={styles.closeButton}
-                    onPress={onClose}
-                  >
-                    <Text style={styles.buttonText}>Close</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.joinButton}>
-                    <Text style={styles.buttonText}>Join</Text>
-                  </TouchableOpacity>
-                </View>
+
+                {/* Enlarged Join Button */}
+                <TouchableOpacity style={styles.joinButton}>
+                  <Text style={styles.buttonText}>Katıl</Text>
+                </TouchableOpacity>
+
                 {/* Invisible spacer for extra space */}
                 <View style={styles.spacer} />
               </View>
@@ -76,7 +78,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     paddingHorizontal: 20,
     paddingTop: 20,
-    alignItems: "center",
+    alignItems: "flex-start",
+    gap: 10,
+    position: "relative", // To position the X icon
+  },
+  closeIcon: {
+    position: "absolute",
+    top: 15,
+    right: 15,
   },
   spacer: {
     height: 40, // Adds space at the bottom
@@ -95,30 +104,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     fontSize: 18,
-    color: "#333",
-  },
-  modalButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-  },
-  closeButton: {
-    backgroundColor: "#EF5350",
-    padding: 12,
-    borderRadius: 10,
-    width: "48%",
-    alignItems: "center",
   },
   joinButton: {
     backgroundColor: "#4CAF50",
-    padding: 12,
+    paddingVertical: 16,
     borderRadius: 10,
-    width: "48%",
+    width: "100%",
     alignItems: "center",
   },
   buttonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
 });
