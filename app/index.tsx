@@ -1,26 +1,11 @@
 import FoolButton from "@/components/FoolButton";
-import { HelloWave } from "@/components/HelloWave";
-import { Ionicons } from "@expo/vector-icons";
-import { Button, Image, Text, View } from "react-native";
-import {
-  GestureHandlerRootView,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { Image, Text, View } from "react-native";
+import TutorialButton from "./components/TutorialButton";
 
 export default function Index() {
   return (
     <View className="flex items-center justify-center h-full w-full bg-primary-500">
-      <GestureHandlerRootView
-        style={{ position: "absolute", top: 52, right: 16 }}
-      >
-        <TouchableOpacity
-          onPress={() => {
-            alert("Tutorial");
-          }}
-        >
-          <Ionicons name="help-circle-sharp" size={52} color="white" />
-        </TouchableOpacity>
-      </GestureHandlerRootView>
+      <TutorialButton />
       <Image
         source={require("../assets/images/logo.webp")}
         style={{ width: 250, height: 250 }}
