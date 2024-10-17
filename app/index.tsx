@@ -1,8 +1,12 @@
+import React, { useState } from "react";
 import FoolButton from "@/components/FoolButton";
 import { Image, Text, View } from "react-native";
 import TutorialButton from "./components/TutorialButton";
+import JoinRoomModal from "./components/modals/JoinRoomModal";
 
 export default function Index() {
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <View className="flex items-center justify-center h-full w-full bg-primary-500">
       <TutorialButton />
@@ -13,16 +17,8 @@ export default function Index() {
       />
       <View style={{ gap: 20 }} className="flex flex-col items-center my-8">
         <Text className="text-4xl text-secondary-500">
-          {" "}
           Foolery'e Hoşgeldin!
         </Text>
-        {/* 
-        <Text
-          style={{ fontFamily: "Baloo2", gap: 12 }}
-          className="text-center text-xl text-text-500 px-6 font-bold"
-        >
-          Rakibini kandır ve kazan!
-        </Text> */}
       </View>
       <View style={{ gap: 16 }} className="flex flex-col items-center mt-6">
         <FoolButton
@@ -35,17 +31,23 @@ export default function Index() {
         >
           <Text>Bir Oda Oluştur</Text>
         </FoolButton>
+
+        {/* Trigger Modal */}
         <FoolButton
           variant="secondary"
           size="large"
-          onPress={() => {
-            alert("Join a Room!");
-          }}
+          onPress={() => setModalVisible(true)}
           iconPrefix="enter-outline"
         >
           <Text>Arkadaşına Katıl</Text>
         </FoolButton>
       </View>
+
+      {/* Join Room Modal */}
+      <JoinRoomModal
+        isVisible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 }
