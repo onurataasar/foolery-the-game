@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   Text,
@@ -9,14 +9,65 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ModalComponentProps } from "@/types/component-types";
+import { useNavigation } from "@react-navigation/native";
+import { db } from "@/firebaseConfig"; // Assume Firebase is initialized here
+import { collection, addDoc } from "firebase/firestore";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import { RootStackParamList } from "@/types/navigation-types";
+import { createRoom } from "@/services/sessionService";
+
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "PreGameRoom"
+>;
 
 const CreateRoomModal: React.FC<ModalComponentProps> = ({
   isVisible,
   onClose,
 }) => {
+  const navigation = useNavigation<NavigationProp>();
+  const [nickname, setNickname] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
+
+  const handleCreateRoom = async () => {
+    if (!nickname.trim()) {
+      Alert.alert("Lütfen bir rumuz girin.");
+      return;
+    }
+
+    setIsCreating(true);
+
+    try {
+      const roomId = await createRoom({ nickname });
+
+      if (!roomId) {
+        throw new Error("Room ID is undefined");
+      }
+
+      // Close the modal first
+      onClose();
+
+      // Then navigate with a slight delay to ensure modal is closed
+      setTimeout(() => {
+        navigation.navigate("PreGameRoom", {
+          roomId: roomId.toString(),
+          isOwner: true,
+          nickname: nickname,
+        });
+      }, 100);
+    } catch (error) {
+      console.error("Oda oluşturulurken bir hata meydana geldi: ", error);
+      Alert.alert("Bir hata meydana geldi. Lütfen tekrar deneyin.");
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
   return (
     <Modal
       transparent={true}
@@ -44,13 +95,26 @@ const CreateRoomModal: React.FC<ModalComponentProps> = ({
                     style={styles.input}
                     placeholder="Arkadaşlarınızın sizi tanıyabilmesi için bir rumuz girin"
                     placeholderTextColor="#888"
-                    keyboardType="numeric"
+                    value={nickname}
+                    onChangeText={setNickname}
+                    keyboardType="default"
                   />
                 </View>
 
                 {/* Enlarged Join Button */}
-                <TouchableOpacity style={styles.joinButton}>
-                  <Text style={styles.buttonText}>Oda Oluştur</Text>
+                <TouchableOpacity
+                  style={[
+                    styles.joinButton,
+                    isCreating && styles.disabledButton,
+                  ]}
+                  onPress={handleCreateRoom}
+                  disabled={isCreating}
+                >
+                  {isCreating ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <Text style={styles.buttonText}>Oda Oluştur</Text>
+                  )}
                 </TouchableOpacity>
 
                 {/* Invisible spacer for extra space */}
@@ -118,6 +182,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: "100%",
     alignItems: "center",
+  },
+  disabledButton: {
+    backgroundColor: "#ccc",
+    pointerEvents: "none",
   },
   buttonText: {
     color: "white",

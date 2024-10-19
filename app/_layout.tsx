@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
+import PreGameRoom from "./PreGameRoom";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -37,6 +38,13 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="PreGameRoom"
+          options={{
+            headerShown: false,
+          }}
+        />
+
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>

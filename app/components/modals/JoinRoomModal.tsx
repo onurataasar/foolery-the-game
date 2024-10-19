@@ -44,7 +44,7 @@ const JoinRoomModal: React.FC<ModalComponentProps> = ({
                     style={styles.input}
                     placeholder="Arkadaşlarınızın sizi tanıyabilmesi için bir rumuz girin"
                     placeholderTextColor="#888"
-                    keyboardType="numeric"
+                    keyboardType="default"
                   />
                 </View>
                 <View style={styles.inputContainer}>
@@ -53,7 +53,7 @@ const JoinRoomModal: React.FC<ModalComponentProps> = ({
                     style={styles.input}
                     placeholder="Oyuna başlamak için oda kodunu girin"
                     placeholderTextColor="#888"
-                    keyboardType="numeric"
+                    keyboardType="default"
                   />
                 </View>
 
