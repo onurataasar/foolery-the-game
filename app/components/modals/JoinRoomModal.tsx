@@ -17,6 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import { RootStackParamList } from "@/types/navigation-types";
 import { joinRoom } from "@/services/sessionService";
+import SubmitButton from "@/components/SubmitButton";
 
 type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -114,12 +115,11 @@ const JoinRoomModal: React.FC<ModalComponentProps> = ({
                 </View>
 
                 {/* Enlarged Join Button */}
-                <TouchableOpacity
-                  style={styles.joinButton}
+                <SubmitButton
                   onPress={handleJoinRoom}
-                >
-                  <Text style={styles.buttonText}>Katıl</Text>
-                </TouchableOpacity>
+                  loading={isJoining}
+                  label="Odaya Katıl"
+                />
 
                 {/* Invisible spacer for extra space */}
                 <View style={styles.spacer} />

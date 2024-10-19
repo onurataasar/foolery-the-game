@@ -1,3 +1,4 @@
+import SubmitButton from "@/components/SubmitButton";
 import { createRoom } from "@/services/sessionService";
 import { ModalComponentProps } from "@/types/component-types";
 import { RootStackParamList } from "@/types/navigation-types";
@@ -99,21 +100,12 @@ const CreateRoomModal: React.FC<ModalComponentProps> = ({
                   />
                 </View>
 
-                {/* Enlarged Join Button */}
-                <TouchableOpacity
-                  style={[
-                    styles.joinButton,
-                    isCreating && styles.disabledButton,
-                  ]}
+                {/* Submit button */}
+                <SubmitButton
                   onPress={handleCreateRoom}
-                  disabled={isCreating}
-                >
-                  {isCreating ? (
-                    <ActivityIndicator color="white" />
-                  ) : (
-                    <Text style={styles.buttonText}>Oda Oluştur</Text>
-                  )}
-                </TouchableOpacity>
+                  loading={isCreating}
+                  label="Oda Oluştur"
+                />
 
                 {/* Invisible spacer for extra space */}
                 <View style={styles.spacer} />
@@ -172,23 +164,6 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 10,
     fontSize: 18,
-  },
-  joinButton: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 16,
-    borderRadius: 10,
-    marginTop: 20,
-    width: "100%",
-    alignItems: "center",
-  },
-  disabledButton: {
-    backgroundColor: "#ccc",
-    pointerEvents: "none",
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
   },
 });
 
