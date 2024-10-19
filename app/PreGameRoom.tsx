@@ -1,15 +1,15 @@
+import { getRoomInfo } from "@/services/sessionService";
+import { Player } from "@/types/entity-types";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  FlatList,
-  StyleSheet,
-  ActivityIndicator,
 } from "react-native";
-import { getRoomInfo } from "@/services/sessionService";
-import { useRoute, RouteProp } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 // Define your navigation types
 type RootStackParamList = {
@@ -22,11 +22,6 @@ type RootStackParamList = {
 };
 
 type PreGameRoomRouteProp = RouteProp<RootStackParamList, "PreGameRoom">;
-
-interface Player {
-  id: string;
-  nickname: string;
-}
 
 const PreGameRoom: React.FC = () => {
   const route = useRoute<PreGameRoomRouteProp>();
@@ -113,7 +108,7 @@ const PreGameRoom: React.FC = () => {
       <FlatList
         data={players}
         renderItem={renderPlayer}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id || item.nickname}
         style={styles.playerList}
         ListEmptyComponent={() => (
           <Text style={styles.emptyText}>Henüz oyuncu yok</Text>
