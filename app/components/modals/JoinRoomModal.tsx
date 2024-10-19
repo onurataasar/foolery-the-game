@@ -60,6 +60,7 @@ const JoinRoomModal: React.FC<ModalComponentProps> = ({
           roomId: roomCode,
           isOwner: false,
           nickname: nickname,
+          playerId: joined.id,
         });
       }, 100);
     } catch (error) {
@@ -74,7 +75,7 @@ const JoinRoomModal: React.FC<ModalComponentProps> = ({
     <Modal
       transparent={true}
       visible={isVisible}
-      animationType="slide"
+      animationType="fade"
       onRequestClose={onClose}
     >
       <KeyboardAvoidingView

@@ -85,6 +85,7 @@ export default function Index() {
 const styles = {
   container: {
     flex: 1,
+    backgroundColor: "#4A97FF",
   },
   image: {
     flex: 1,

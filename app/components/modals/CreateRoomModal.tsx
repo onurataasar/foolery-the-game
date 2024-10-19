@@ -42,9 +42,9 @@ const CreateRoomModal: React.FC<ModalComponentProps> = ({
     setIsCreating(true);
 
     try {
-      const roomId = await createRoom({ nickname });
+      const response = await createRoom({ nickname });
 
-      if (!roomId) {
+      if (!response.roomId) {
         throw new Error("Room ID is undefined");
       }
 
@@ -54,9 +54,10 @@ const CreateRoomModal: React.FC<ModalComponentProps> = ({
       // Then navigate with a slight delay to ensure modal is closed
       setTimeout(() => {
         navigation.navigate("PreGameRoom", {
-          roomId: roomId.toString(),
+          roomId: response.roomId,
           isOwner: true,
-          nickname: nickname,
+          nickname: response.player.nickname,
+          playerId: response.player.id,
         });
       }, 100);
     } catch (error) {
@@ -71,7 +72,7 @@ const CreateRoomModal: React.FC<ModalComponentProps> = ({
     <Modal
       transparent={true}
       visible={isVisible}
-      animationType="slide"
+      animationType="fade"
       onRequestClose={onClose}
     >
       <KeyboardAvoidingView

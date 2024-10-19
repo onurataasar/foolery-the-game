@@ -5,6 +5,7 @@ export type RootStackParamList = {
     roomId: string;
     isOwner: boolean;
     nickname: string;
+    playerId: string;
   };
   // other routes
 };

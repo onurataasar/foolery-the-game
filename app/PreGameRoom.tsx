@@ -1,6 +1,8 @@
-import { getRoomInfo } from "@/services/sessionService";
+import SubmitButton from "@/components/SubmitButton";
+import { deleteRoom, getRoomInfo, leaveRoom } from "@/services/sessionService";
 import { Player } from "@/types/entity-types";
 import { RouteProp, useRoute } from "@react-navigation/native";
+import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -10,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 
 // Define your navigation types
 type RootStackParamList = {
@@ -17,16 +20,22 @@ type RootStackParamList = {
     roomId: string;
     isOwner: boolean;
     nickname: string;
+    playerId: string;
   };
   // ... other screens
 };
 
 type PreGameRoomRouteProp = RouteProp<RootStackParamList, "PreGameRoom">;
 
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "PreGameRoom"
+>;
+
 const PreGameRoom: React.FC = () => {
   const route = useRoute<PreGameRoomRouteProp>();
   const { roomId, isOwner, nickname } = route.params;
-
+  const navigation = useNavigation<NavigationProp>();
   const [players, setPlayers] = useState<Player[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -64,6 +73,40 @@ const PreGameRoom: React.FC = () => {
       }
     };
   }, [roomId]);
+
+  const handleLeaveRoom = async () => {
+    if (!roomId || route.params.isOwner) {
+      return;
+    }
+    try {
+      const response = await leaveRoom({
+        roomId,
+        playerId: route.params.playerId,
+      });
+      if (response) {
+        console.log("Player left room:", roomId);
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.error("Error leaving room:", error);
+    }
+  };
+
+  const handleDeleteRoom = async () => {
+    if (!roomId || !route.params.isOwner) {
+      return;
+    }
+    try {
+      // Implement your room deletion logic here
+      const response = await deleteRoom(roomId);
+      if (response) {
+        console.log("Room deleted:", roomId);
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.error("Error deleting room:", error);
+    }
+  };
 
   const handleGameStart = () => {
     // Implement your game start logic here
@@ -116,10 +159,18 @@ const PreGameRoom: React.FC = () => {
       />
 
       {isOwner && players.length > 0 && (
-        <TouchableOpacity style={styles.readyButton} onPress={handleGameStart}>
-          <Text style={styles.buttonText}>Oyuna Başla</Text>
-        </TouchableOpacity>
+        <SubmitButton
+          onPress={handleGameStart}
+          label="Oyunu Başlat"
+          loading={false}
+        />
       )}
+      <SubmitButton
+        variant="cancel"
+        onPress={isOwner ? handleDeleteRoom : handleLeaveRoom}
+        label={isOwner ? "Odayı Sil" : "Odadan Ayrıl"}
+        loading={false}
+      />
     </View>
   );
 };

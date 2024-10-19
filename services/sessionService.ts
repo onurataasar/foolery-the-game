@@ -5,6 +5,7 @@ import {
   doc,
   onSnapshot,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig"; // Adjust the path to your config file
 
@@ -24,7 +25,7 @@ const createRoom = async ({ nickname }: { nickname: string }) => {
     });
 
     console.log("Room created with ID:", roomRef.id);
-    return roomRef.id;
+    return { roomId: roomRef.id, player: player };
   } catch (e) {
     console.error("Error creating room: ", e);
     throw e;
@@ -63,7 +64,7 @@ const joinRoom = async ({
     });
 
     console.log("Player joined room:", roomId);
-    return true;
+    return player;
   } catch (e) {
     console.error("Error joining room: ", e);
     throw e;
@@ -98,4 +99,53 @@ const getRoomInfo = (
     }
   );
 };
-export { createRoom, joinRoom, getRoomInfo };
+
+const leaveRoom = async ({
+  roomId,
+  playerId,
+}: {
+  roomId: string;
+  playerId: string;
+}) => {
+  try {
+    const roomRef = doc(db, "rooms", roomId);
+    const roomSnapshot = await getDoc(roomRef);
+
+    if (!roomSnapshot.exists()) {
+      throw new Error("Room not found");
+    }
+
+    const roomData = roomSnapshot.data();
+
+    if (!roomData) {
+      throw new Error("Room data is empty");
+    }
+
+    const updatedPlayers = roomData.players.filter(
+      (player: any) => player.id !== playerId
+    );
+
+    await updateDoc(roomRef, {
+      players: updatedPlayers,
+    });
+
+    console.log("Player left room:", roomId);
+    return true;
+  } catch (e) {
+    console.error("Error leaving room: ", e);
+    throw e;
+  }
+};
+
+const deleteRoom = async (roomId: string) => {
+  try {
+    await deleteDoc(doc(db, "rooms", roomId));
+    console.log("Room deleted:", roomId);
+    return true;
+  } catch (e) {
+    console.error("Error deleting room: ", e);
+    throw e;
+  }
+};
+
+export { createRoom, joinRoom, getRoomInfo, leaveRoom, deleteRoom };

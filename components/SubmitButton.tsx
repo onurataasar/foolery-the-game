@@ -11,16 +11,24 @@ interface SubmitButtonProps {
   onPress: () => void;
   loading: boolean;
   label: string;
+  variant?: "submit" | "cancel";
 }
 
 const SubmitButton: React.FC<SubmitButtonProps> = ({
   onPress,
   loading,
   label,
+  variant = "submit",
 }) => {
   return (
     <TouchableOpacity
-      style={loading ? styles.disabledButton : styles.button}
+      style={
+        loading
+          ? styles.disabledButton
+          : variant === "cancel"
+          ? styles.cancelButton
+          : styles.button
+      }
       onPress={onPress}
       disabled={loading}
     >
@@ -36,6 +44,14 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "#4CAF50",
+    paddingVertical: 16,
+    borderRadius: 10,
+    marginTop: 20,
+    width: "100%",
+    alignItems: "center",
+  },
+  cancelButton: {
+    backgroundColor: "#E74C3C",
     paddingVertical: 16,
     borderRadius: 10,
     marginTop: 20,
