@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   Text,
@@ -9,14 +9,66 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ModalComponentProps } from "@/types/component-types";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import { RootStackParamList } from "@/types/navigation-types";
+import { joinRoom } from "@/services/sessionService";
+
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "PreGameRoom"
+>; /*  */
 
 const JoinRoomModal: React.FC<ModalComponentProps> = ({
   isVisible,
   onClose,
 }) => {
+  const navigation = useNavigation<NavigationProp>();
+  const [nickname, setNickname] = useState("");
+  const [roomCode, setRoomCode] = useState("");
+  const [isJoining, setIsJoining] = useState(false);
+
+  const handleJoinRoom = async () => {
+    if (!nickname.trim()) {
+      Alert.alert("Lütfen bir rumuz girin.");
+      return;
+    }
+
+    setIsJoining(true);
+
+    try {
+      const joined = await joinRoom({
+        roomId: roomCode,
+        nickname: nickname,
+      });
+
+      if (!roomCode || !joined) {
+        throw new Error("Room ID is undefined");
+      }
+
+      // Close the modal first
+      onClose();
+
+      // Then navigate with a slight delay to ensure modal is closed
+      setTimeout(() => {
+        navigation.navigate("PreGameRoom", {
+          roomId: roomCode,
+          isOwner: false,
+          nickname: nickname,
+        });
+      }, 100);
+    } catch (error) {
+      console.error("Odaya katılırken bir hata meydana geldi: ", error);
+      Alert.alert("Bir hata meydana geldi. Lütfen tekrar deneyin.");
+    } finally {
+      setIsJoining(false);
+    }
+  };
+
   return (
     <Modal
       transparent={true}
@@ -45,6 +97,8 @@ const JoinRoomModal: React.FC<ModalComponentProps> = ({
                     placeholder="Arkadaşlarınızın sizi tanıyabilmesi için bir rumuz girin"
                     placeholderTextColor="#888"
                     keyboardType="default"
+                    value={nickname}
+                    onChangeText={setNickname}
                   />
                 </View>
                 <View style={styles.inputContainer}>
@@ -54,11 +108,16 @@ const JoinRoomModal: React.FC<ModalComponentProps> = ({
                     placeholder="Oyuna başlamak için oda kodunu girin"
                     placeholderTextColor="#888"
                     keyboardType="default"
+                    value={roomCode}
+                    onChangeText={setRoomCode}
                   />
                 </View>
 
                 {/* Enlarged Join Button */}
-                <TouchableOpacity style={styles.joinButton}>
+                <TouchableOpacity
+                  style={styles.joinButton}
+                  onPress={handleJoinRoom}
+                >
                   <Text style={styles.buttonText}>Katıl</Text>
                 </TouchableOpacity>
 
@@ -122,6 +181,14 @@ const styles = StyleSheet.create({
   },
   joinButton: {
     backgroundColor: "#4CAF50",
+    paddingVertical: 16,
+    borderRadius: 10,
+    marginTop: 20,
+    width: "100%",
+    alignItems: "center",
+  },
+  disabledButton: {
+    backgroundColor: "#ccc",
     paddingVertical: 16,
     borderRadius: 10,
     marginTop: 20,

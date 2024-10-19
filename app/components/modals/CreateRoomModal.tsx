@@ -1,30 +1,28 @@
+import { createRoom } from "@/services/sessionService";
+import { ModalComponentProps } from "@/types/component-types";
+import { RootStackParamList } from "@/types/navigation-types";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
-  Modal,
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput,
-  TouchableWithoutFeedback,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  Alert,
   ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { ModalComponentProps } from "@/types/component-types";
-import { useNavigation } from "@react-navigation/native";
-import { db } from "@/firebaseConfig"; // Assume Firebase is initialized here
-import { collection, addDoc } from "firebase/firestore";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
-import { RootStackParamList } from "@/types/navigation-types";
-import { createRoom } from "@/services/sessionService";
 
 type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "PreGameRoom"
->;
+>; /*  */
 
 const CreateRoomModal: React.FC<ModalComponentProps> = ({
   isVisible,

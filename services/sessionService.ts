@@ -4,6 +4,7 @@ import {
   getDoc,
   doc,
   onSnapshot,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig"; // Adjust the path to your config file
 
@@ -26,6 +27,45 @@ const createRoom = async ({ nickname }: { nickname: string }) => {
     return roomRef.id;
   } catch (e) {
     console.error("Error creating room: ", e);
+    throw e;
+  }
+};
+
+const joinRoom = async ({
+  roomId,
+  nickname,
+}: {
+  roomId: string;
+  nickname: string;
+}) => {
+  try {
+    const roomRef = doc(db, "rooms", roomId);
+    const roomSnapshot = await getDoc(roomRef);
+
+    if (!roomSnapshot.exists()) {
+      throw new Error("Room not found");
+    }
+
+    const roomData = roomSnapshot.data();
+
+    if (!roomData) {
+      throw new Error("Room data is empty");
+    }
+
+    // Create player object with proper structure
+    const player = {
+      id: Date.now().toString(), // Generate a temporary ID
+      nickname: nickname,
+    };
+
+    await updateDoc(roomRef, {
+      players: [...roomData.players, player],
+    });
+
+    console.log("Player joined room:", roomId);
+    return true;
+  } catch (e) {
+    console.error("Error joining room: ", e);
     throw e;
   }
 };
@@ -58,4 +98,4 @@ const getRoomInfo = (
     }
   );
 };
-export { createRoom, getRoomInfo };
+export { createRoom, joinRoom, getRoomInfo };
