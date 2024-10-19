@@ -67,9 +67,6 @@ module.exports = {
           200: "#151718", // Default Dark Background
         },
       },
-      fontFamily: {
-        sans: ["Poppins", "system-ui", "sans-serif"], // Example of a custom font family
-      },
       textColor: {
         heading: "#11181C", // Heading color
         main: "#333", // Main text color
