@@ -3,9 +3,11 @@ import FoolButton from "@/components/FoolButton";
 import { Image, Text, View } from "react-native";
 import TutorialButton from "./components/TutorialButton";
 import JoinRoomModal from "./components/modals/JoinRoomModal";
+import CreateRoomModal from "./components/modals/CreateRoomModal";
 
 export default function Index() {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [joinModalVisible, setJoinModalVisible] = useState(false);
+  const [createModalVisible, setCreateModalVisible] = useState(false);
 
   return (
     <View className="flex items-center justify-center h-full w-full bg-primary-500">
@@ -25,7 +27,7 @@ export default function Index() {
           variant="primary"
           size="large"
           onPress={() => {
-            alert("Create a Room!");
+            setCreateModalVisible(true);
           }}
           iconPrefix="add-sharp"
         >
@@ -36,7 +38,7 @@ export default function Index() {
         <FoolButton
           variant="secondary"
           size="large"
-          onPress={() => setModalVisible(true)}
+          onPress={() => setJoinModalVisible(true)}
           iconPrefix="enter-outline"
         >
           <Text>Arkadaşına Katıl</Text>
@@ -45,8 +47,14 @@ export default function Index() {
 
       {/* Join Room Modal */}
       <JoinRoomModal
-        isVisible={modalVisible}
-        onClose={() => setModalVisible(false)}
+        isVisible={joinModalVisible}
+        onClose={() => setJoinModalVisible(false)}
+      />
+
+      {/* Create Room Modal */}
+      <CreateRoomModal
+        isVisible={createModalVisible}
+        onClose={() => setCreateModalVisible(false)}
       />
     </View>
   );

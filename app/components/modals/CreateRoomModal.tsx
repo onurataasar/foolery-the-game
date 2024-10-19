@@ -13,7 +13,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { ModalComponentProps } from "@/types/component-types";
 
-const JoinRoomModal: React.FC<ModalComponentProps> = ({
+const CreateRoomModal: React.FC<ModalComponentProps> = ({
   isVisible,
   onClose,
 }) => {
@@ -37,7 +37,7 @@ const JoinRoomModal: React.FC<ModalComponentProps> = ({
                 <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
                   <Ionicons name="close" size={24} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.modalTitle}>Bir Odaya Katıl</Text>
+                <Text style={styles.modalTitle}>Bir Oda Oluştur</Text>
                 <View style={styles.inputContainer}>
                   <Text style={styles.label}>Rumuz</Text>
                   <TextInput
@@ -47,19 +47,10 @@ const JoinRoomModal: React.FC<ModalComponentProps> = ({
                     keyboardType="numeric"
                   />
                 </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.label}>Oda Kodu</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Oyuna başlamak için oda kodunu girin"
-                    placeholderTextColor="#888"
-                    keyboardType="numeric"
-                  />
-                </View>
 
                 {/* Enlarged Join Button */}
                 <TouchableOpacity style={styles.joinButton}>
-                  <Text style={styles.buttonText}>Katıl</Text>
+                  <Text style={styles.buttonText}>Oda Oluştur</Text>
                 </TouchableOpacity>
 
                 {/* Invisible spacer for extra space */}
@@ -135,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default JoinRoomModal;
+export default CreateRoomModal;
