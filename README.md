@@ -1,5 +1,7 @@
 # Welcome to Foolery 👋
 
+![foolery-logo](https://github.com/onurataasar/foolery-the-game/blob/main/assets/images/logo.webp?raw=true)
+
 **Foolery** is a mobile game where players engage in a fun battle of wits, trying to discern the truth from cleverly crafted bluffs.
 
 ## Get Started
