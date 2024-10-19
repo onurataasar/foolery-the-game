@@ -1,13 +1,6 @@
-import PlayerAvatar from "@/components/PlayerAvatar";
-import SubmitButton from "@/components/SubmitButton";
-import { ThemedText } from "@/components/ThemedText";
-import { deleteRoom, getRoomInfo, leaveRoom } from "@/services/sessionService";
-import { Player } from "@/types/entity-types";
-import { Ionicons } from "@expo/vector-icons";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  AppState,
   ActivityIndicator,
   FlatList,
   StyleSheet,
@@ -15,6 +8,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useNavigation } from "expo-router";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import PlayerAvatar from "@/components/PlayerAvatar";
+import SubmitButton from "@/components/SubmitButton";
+import { ThemedText } from "@/components/ThemedText";
+import { deleteRoom, getRoomInfo, leaveRoom } from "@/services/sessionService";
+import { Player } from "@/types/entity-types";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 
 // Define your navigation types
@@ -25,11 +26,9 @@ type RootStackParamList = {
     nickname: string;
     playerId: string;
   };
-  // ... other screens
 };
 
 type PreGameRoomRouteProp = RouteProp<RootStackParamList, "PreGameRoom">;
-
 type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "PreGameRoom"
@@ -37,7 +36,7 @@ type NavigationProp = NativeStackNavigationProp<
 
 const PreGameRoom: React.FC = () => {
   const route = useRoute<PreGameRoomRouteProp>();
-  const { roomId, isOwner, nickname } = route.params;
+  const { roomId, isOwner } = route.params;
   const navigation = useNavigation<NavigationProp>();
   const [players, setPlayers] = useState<Player[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -78,9 +77,7 @@ const PreGameRoom: React.FC = () => {
   }, [roomId]);
 
   const handleLeaveRoom = async () => {
-    if (!roomId || route.params.isOwner) {
-      return;
-    }
+    if (!roomId || isOwner) return;
     try {
       const response = await leaveRoom({
         roomId,
@@ -96,24 +93,60 @@ const PreGameRoom: React.FC = () => {
   };
 
   const handleDeleteRoom = async () => {
-    if (!roomId || !route.params.isOwner) {
-      return;
-    }
+    if (!roomId || !isOwner) return;
+
     try {
       const response = await deleteRoom(roomId);
       if (response) {
         console.log("Room deleted:", roomId);
-        navigation.goBack();
+        if (navigation.canGoBack()) {
+          navigation.goBack();
+        }
       }
     } catch (error) {
       console.error("Error deleting room:", error);
+      setError("Oda silinirken bir hata meydana geldi.");
     }
   };
 
   const handleGameStart = () => {
-    // Implement your game start logic here
     console.log("Game starting...");
   };
+
+  // Handle user leaving the page (beforeRemove event)
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", async () => {
+      if (isOwner) {
+        await handleDeleteRoom();
+      } else {
+        await handleLeaveRoom();
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, roomId, isOwner]);
+
+  // Handle app closing or going to background
+  useEffect(() => {
+    const handleAppStateChange = async (nextAppState: string) => {
+      if (nextAppState === "background" || nextAppState === "inactive") {
+        if (isOwner) {
+          await handleDeleteRoom();
+        } else {
+          await handleLeaveRoom();
+        }
+      }
+    };
+
+    const appStateListener = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
+
+    return () => {
+      appStateListener.remove();
+    };
+  }, [isOwner, roomId]);
 
   if (isLoading) {
     return (
@@ -129,10 +162,7 @@ const PreGameRoom: React.FC = () => {
         <Text style={styles.errorText}>{error}</Text>
         <TouchableOpacity
           style={styles.retryButton}
-          onPress={() => {
-            setIsLoading(true);
-            setError(null);
-          }}
+          onPress={() => setIsLoading(true)}
         >
           <Text style={styles.buttonText}>Tekrar Dene</Text>
         </TouchableOpacity>
