@@ -97,7 +97,6 @@ const PreGameRoom: React.FC = () => {
       return;
     }
     try {
-      // Implement your room deletion logic here
       const response = await deleteRoom(roomId);
       if (response) {
         console.log("Room deleted:", roomId);
@@ -139,6 +138,12 @@ const PreGameRoom: React.FC = () => {
           }}
         >
           <Text style={styles.buttonText}>Tekrar Dene</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.buttonText}>Geri Dön</Text>
         </TouchableOpacity>
       </View>
     );

@@ -95,9 +95,10 @@ const CreateRoomModal: React.FC<ModalComponentProps> = ({
                     style={styles.input}
                     placeholder="Arkadaşlarınızın sizi tanıyabilmesi için bir rumuz girin"
                     placeholderTextColor="#888"
+                    keyboardType="default"
+                    maxLength={15}
                     value={nickname}
                     onChangeText={setNickname}
-                    keyboardType="default"
                   />
                 </View>
 

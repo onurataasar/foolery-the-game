@@ -62,6 +62,7 @@ const JoinRoomModal: React.FC<ModalComponentProps> = ({
           nickname: nickname,
           playerId: joined.id,
         });
+        setRoomCode("");
       }, 100);
     } catch (error) {
       console.error("Odaya katılırken bir hata meydana geldi: ", error);
@@ -99,6 +100,7 @@ const JoinRoomModal: React.FC<ModalComponentProps> = ({
                     placeholder="Arkadaşlarınızın sizi tanıyabilmesi için bir rumuz girin"
                     placeholderTextColor="#888"
                     keyboardType="default"
+                    maxLength={15}
                     value={nickname}
                     onChangeText={setNickname}
                   />

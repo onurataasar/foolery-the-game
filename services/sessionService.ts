@@ -6,8 +6,10 @@ import {
   onSnapshot,
   updateDoc,
   deleteDoc,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig"; // Adjust the path to your config file
+import { generateRoomId } from "@/utils/generateRoomId";
 
 const createRoom = async ({ nickname }: { nickname: string }) => {
   try {
@@ -16,16 +18,16 @@ const createRoom = async ({ nickname }: { nickname: string }) => {
       id: Date.now().toString(), // Generate a temporary ID
       nickname: nickname,
     };
-
+    const newRoomId = generateRoomId();
     // Create room with properly structured player array
-    const roomRef = await addDoc(collection(db, "rooms"), {
+    const roomRef = await setDoc(doc(db, "rooms", newRoomId), {
       createdAt: new Date().toISOString(),
       players: [player], // Store complete player objects
       owner: nickname,
     });
 
-    console.log("Room created with ID:", roomRef.id);
-    return { roomId: roomRef.id, player: player };
+    console.log("Room created:", roomRef);
+    return { roomId: newRoomId, player: player };
   } catch (e) {
     console.error("Error creating room: ", e);
     throw e;
