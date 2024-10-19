@@ -1,6 +1,9 @@
+import PlayerAvatar from "@/components/PlayerAvatar";
 import SubmitButton from "@/components/SubmitButton";
+import { ThemedText } from "@/components/ThemedText";
 import { deleteRoom, getRoomInfo, leaveRoom } from "@/services/sessionService";
 import { Player } from "@/types/entity-types";
+import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -112,12 +115,6 @@ const PreGameRoom: React.FC = () => {
     console.log("Game starting...");
   };
 
-  const renderPlayer = ({ item }: { item: Player }) => (
-    <View style={styles.playerItem}>
-      <Text style={styles.playerText}>{item.nickname || "İsimsiz Oyuncu"}</Text>
-    </View>
-  );
-
   if (isLoading) {
     return (
       <View style={styles.centerContainer}>
@@ -151,24 +148,44 @@ const PreGameRoom: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <View className="flex flex-col gap-y-2 w-full items-center justify-center mb-10">
+        <Text className="text-center font-quick text-text-500 dark:text-white text-lg font-bold">
+          Oda Numarası:
+        </Text>
+        <Text className="text-4xl text-center text-primary-500 dark:text-primary-400">
+          {roomId}
+        </Text>
+      </View>
       <Text style={styles.title}>Oyuncular ({players.length})</Text>
 
       <FlatList
+        key={"playerList"}
         data={players}
-        renderItem={renderPlayer}
+        renderItem={({ item }) => (
+          <PlayerAvatar item={item} playerId={route.params.playerId} />
+        )}
         keyExtractor={(item) => item.id || item.nickname}
         style={styles.playerList}
+        numColumns={2}
         ListEmptyComponent={() => (
           <Text style={styles.emptyText}>Henüz oyuncu yok</Text>
         )}
       />
 
-      {isOwner && players.length > 0 && (
+      {isOwner && players.length > 0 ? (
         <SubmitButton
           onPress={handleGameStart}
           label="Oyunu Başlat"
           loading={false}
         />
+      ) : (
+        <ThemedText
+          lightColor="#FFA000"
+          darkColor="#FFD54F"
+          style={{ textAlign: "center" }}
+        >
+          (Oda sahibinin oyunu başlatması bekleniyor...)
+        </ThemedText>
       )}
       <SubmitButton
         variant="cancel"
@@ -184,19 +201,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    marginTop: 50,
   },
   centerContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
+    fontFamily: "Quicksand",
     textAlign: "center",
+    color: "#FFE0B2",
   },
+
   playerList: {
     flex: 1,
   },
@@ -210,6 +229,8 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
+    borderColor: "#f0f0f0",
+    borderWidth: 2,
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,

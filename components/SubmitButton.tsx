@@ -68,8 +68,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
+    fontFamily: "Baloo",
   },
 });
 

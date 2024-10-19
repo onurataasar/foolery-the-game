@@ -17,13 +17,14 @@ const createRoom = async ({ nickname }: { nickname: string }) => {
     const player = {
       id: Date.now().toString(), // Generate a temporary ID
       nickname: nickname,
+      isOwner: true,
     };
     const newRoomId = generateRoomId();
     // Create room with properly structured player array
     const roomRef = await setDoc(doc(db, "rooms", newRoomId), {
       createdAt: new Date().toISOString(),
       players: [player], // Store complete player objects
-      owner: nickname,
+      owner: player,
     });
 
     console.log("Room created:", roomRef);
@@ -59,6 +60,7 @@ const joinRoom = async ({
     const player = {
       id: Date.now().toString(), // Generate a temporary ID
       nickname: nickname,
+      isOwner: false,
     };
 
     await updateDoc(roomRef, {
