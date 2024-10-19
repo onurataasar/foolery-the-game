@@ -41,14 +41,25 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                 <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
                   <Ionicons name="close" size={24} color="black" />
                 </TouchableOpacity>
-
                 <Text style={styles.modalTitle}>Bir Odaya Katıl</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Oyuna başlamak için oda kodunu girin"
-                  placeholderTextColor="#888"
-                  keyboardType="numeric"
-                />
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>Rumuz</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Arkadaşlarınızın sizi tanıyabilmesi için bir rumuz girin"
+                    placeholderTextColor="#888"
+                    keyboardType="numeric"
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>Oda Kodu</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Oyuna başlamak için oda kodunu girin"
+                    placeholderTextColor="#888"
+                    keyboardType="numeric"
+                  />
+                </View>
 
                 {/* Enlarged Join Button */}
                 <TouchableOpacity style={styles.joinButton}>
@@ -96,19 +107,28 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: "#333",
   },
+  inputContainer: {
+    width: "100%",
+  },
+  label: {
+    fontSize: 18,
+    color: "#333",
+    marginBottom: 5,
+    width: "100%",
+  },
   input: {
     width: "100%",
     padding: 12,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 10,
-    marginBottom: 20,
     fontSize: 18,
   },
   joinButton: {
     backgroundColor: "#4CAF50",
     paddingVertical: 16,
     borderRadius: 10,
+    marginTop: 20,
     width: "100%",
     alignItems: "center",
   },
