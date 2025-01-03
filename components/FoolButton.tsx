@@ -1,5 +1,12 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  View,
+  TextStyle,
+  ViewStyle,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Assuming you're using Ionicons
 
 interface FoolButtonProps {
@@ -20,7 +27,7 @@ const FoolButton: React.FC<FoolButtonProps> = ({
   className,
   variant = "primary",
   size = "medium",
-  iconPrefix = "arrow-forward-sharp",
+  iconPrefix,
   iconSize = 24,
   iconColor = "white",
   disabled = false, // Handle disabled state
@@ -29,12 +36,14 @@ const FoolButton: React.FC<FoolButtonProps> = ({
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
-      style={[
-        styles.button,
-        styles[variant],
-        styles[size],
-        disabled && styles.disabledButton, // Disabled style handling
-      ]}
+      style={
+        [
+          styles.button,
+          styles[variant],
+          styles[size],
+          disabled && styles.disabledButton, // Ensure only ViewStyle types are included
+        ] as ViewStyle[]
+      } // Type assertion to ViewStyle array
       className={className}
       accessibilityRole="button"
       accessibilityLabel={typeof children === "string" ? children : "button"}
@@ -45,18 +54,19 @@ const FoolButton: React.FC<FoolButtonProps> = ({
             name={iconPrefix}
             size={iconSize} // Dynamic size
             color={iconColor} // Dynamic color
-            style={styles.icon}
+            style={styles.icon as TextStyle}
           />
         )}
         <Text
           style={[
-            styles.text,
+            styles.text as TextStyle,
             styles[
               `text${size.charAt(0).toUpperCase() + size.slice(1)}` as
                 | "textSmall"
                 | "textMedium"
                 | "textLarge"
-            ],
+                | keyof typeof styles
+            ] as TextStyle,
           ]}
         >
           {children}
@@ -69,7 +79,7 @@ const FoolButton: React.FC<FoolButtonProps> = ({
 const styles = StyleSheet.create({
   button: {
     padding: 10,
-    borderRadius: 45,
+    borderRadius: 10,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -78,10 +88,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   primary: {
-    backgroundColor: "#EF5350",
+    backgroundColor: "#FF9800",
   },
   secondary: {
-    backgroundColor: "#FF9800",
+    color: "#FAFBFD",
+    backgroundColor: "#4A97FF",
   },
   disabledButton: {
     backgroundColor: "#D3D3D3", // Disabled button color
@@ -101,8 +112,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
-    fontWeight: "semibold",
+    fontWeight: "600",
     fontFamily: "Baloo",
+    letterSpacing: 1.02,
   },
   textSmall: {
     fontSize: 12,
@@ -116,9 +128,10 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   icon: {
-    marginRight: 8,
+    marginLeft: -16,
   },
 });
 

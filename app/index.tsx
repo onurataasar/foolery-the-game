@@ -31,17 +31,17 @@ export default function Index() {
             flexDirection: "column",
           }}
         >
-          <Text
+          {/* <Text
             style={{
-              fontSize: 36,
+              fontSize: 28,
               fontWeight: "bold",
               textAlign: "center",
               width: "100%",
             }}
-            className="text-secondary-500 font-baloo"
+            className="text-[#FAFBFD] font-baloo"
           >
-            1.. 2.. 3.. Foolery!
-          </Text>
+            Hadi Başlayalım
+          </Text> */}
         </View>
         <View style={{ gap: 16 }} className="flex flex-col items-center mt-6">
           <FoolButton
@@ -50,7 +50,7 @@ export default function Index() {
             onPress={() => {
               setCreateModalVisible(true);
             }}
-            iconPrefix="add-sharp"
+            //iconPrefix="add-sharp"
           >
             <Text>Bir Oda Oluştur</Text>
           </FoolButton>
@@ -60,7 +60,7 @@ export default function Index() {
             variant="secondary"
             size="large"
             onPress={() => setJoinModalVisible(true)}
-            iconPrefix="enter-outline"
+            //iconPrefix="enter-outline"
           >
             <Text>Arkadaşına Katıl</Text>
           </FoolButton>

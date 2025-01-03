@@ -232,6 +232,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     marginTop: 50,
+    backgroundColor: "#000080",
   },
   centerContainer: {
     flex: 1,
